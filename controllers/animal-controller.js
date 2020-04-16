@@ -2,12 +2,15 @@ var express = require('express');
 var router = express.Router();
 var sequelize = require('../db');
 var Animal = sequelize.import('../models/animal');
+// const validateSession = require('../middleware/validate-session');
 
 router.post('/create', (req, res) => {
+  console.log('req -->', req);
   const animalFromRequest = {
     name: req.body.name,
     legNumber: req.body.legNumber,
-    predator: req.body.predator
+    predator: req.body.predator,
+    userId: req.user.id
   }
   Animal.create(animalFromRequest)
     .then(animal => res.status(200).json(animal))
@@ -27,7 +30,8 @@ router.get('/', function (req, res) {
 })
 
 router.delete('/delete/:id', (req, res) => {
-  Animal.destroy({ where: { id: req.params.id } })
+  console.log('userId -->', req.user.id);
+  Animal.destroy({ where: { id: req.params.id, userId: req.user.id } })
     .then(recordsChanged => res.status(200).json({ message: `${recordsChanged} record(s) deleted.` }))
     .catch(err => res.status(500).json({ error: err }))
 })

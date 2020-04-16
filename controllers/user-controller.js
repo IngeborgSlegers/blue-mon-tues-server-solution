@@ -11,7 +11,7 @@ router.post('/create', (req, res) => {
     password: bcrypt.hashSync(req.body.password, 13)
   })
     .then(user => {
-      let token = jwt.sign({ id: user.id }, 'Super secret', { expiresIn: '1d'});
+      let token = jwt.sign({ id: user.id, username: user.username }, 'Super secret', { expiresIn: '1d'});
       res.status(200).json({
         userResponse: user,
         tokenResponse: token

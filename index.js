@@ -12,6 +12,8 @@ app.use(bodyParser.json());
 app.use(require('./middleware/headers'));
 
 app.use('/user', user);
+
+app.use(require('./middleware/validate-session'));
 app.use('/animal', animal);
 
 app.listen(3000, function(){
